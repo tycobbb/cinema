@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -13,33 +12,41 @@ public class Subtitles: MonoBehaviour {
     [Tooltip("the delay between lines")]
     [SerializeField] AnimationCurve m_Delay = CurveExt.One();
 
-    // -- config --
-    [Header("config")]
-    [Tooltip("the movie script")]
-    [SerializeField] string[] m_Lines;
-
     // -- nodes --
     [Header("nodes")]
     [Tooltip("the subtitle text")]
     [SerializeField] TMP_Text m_Subtitle;
 
+    [Tooltip("file")]
+    [SerializeField] TextAsset m_ScriptFile;
+
+    // -- props --
+    /// the script lines
+    string[] m_Lines;
+
     // -- lifecycle --
+    void Awake() {
+        /// set props
+        m_Lines = DecodeLines();
+    }
+
     void Start() {
-        PlaySubtitles();
+        PlayLines();
     }
 
     // -- commands --
     /// start autoplaying subtitles
-    void PlaySubtitles() {
-        StartCoroutine(PlaySubtitlesAsync());
+    void PlayLines() {
+        StartCoroutine(PlayLinesAsync());
     }
 
     /// start autoplaying subtitles
-    IEnumerator PlaySubtitlesAsync() {
+    IEnumerator PlayLinesAsync() {
         var i = 0;
 
         while (true) {
             var line = m_Lines[i];
+            Debug.Log($"play {line}");
             m_Subtitle.text = m_Lines[i];
 
             // get reading time
@@ -55,5 +62,17 @@ public class Subtitles: MonoBehaviour {
             // wait until next line
             yield return new WaitForSeconds(duration);
         }
+    }
+
+    // -- queries --
+    /// decode the script lines
+    string[] DecodeLines() {
+        var lines = m_ScriptFile.text.Split('\n');
+
+        for (var i = 0; i < lines.Length; i++) {
+            lines[i] = lines[i].Trim();
+        }
+
+        return lines;
     }
 }
