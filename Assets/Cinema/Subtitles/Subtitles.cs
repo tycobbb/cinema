@@ -30,18 +30,14 @@ public class Subtitles: MonoBehaviour {
         m_Lines = DecodeLines();
     }
 
-    void Start() {
-        PlayLines();
-    }
-
     // -- commands --
     /// start autoplaying subtitles
-    void PlayLines() {
-        StartCoroutine(PlayLinesAsync());
+    public void Play() {
+        StartCoroutine(PlayAsync());
     }
 
     /// start autoplaying subtitles
-    IEnumerator PlayLinesAsync() {
+    IEnumerator PlayAsync() {
         var i = 0;
 
         while (true) {
