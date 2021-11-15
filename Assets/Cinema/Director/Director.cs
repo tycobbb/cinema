@@ -31,9 +31,6 @@ public class Director: MonoBehaviour {
     [Tooltip("the lead actor")]
     [SerializeField] Actor m_Actor;
 
-    [Tooltip("the ambient music")]
-    [SerializeField] Musicker m_Ambient;
-
     [Tooltip("the camera")]
     [SerializeField] Transform m_Camera;
 
@@ -50,9 +47,6 @@ public class Director: MonoBehaviour {
     /// the amount the look is rotated
     Vector2 m_LookRotation;
 
-    /// the wind loop
-    Loop m_Wind;
-
     /// the director's actions
     DirectorActions m_Actions;
 
@@ -60,17 +54,11 @@ public class Director: MonoBehaviour {
     void Awake() {
         // set props
         m_Actions = new DirectorActions(m_Input);
-
-        // set audio props
-        m_Wind = new Loop(10.0f, 2.0f, Tone.I);
     }
 
     void Start() {
         // show initial shot
         Show(ShotName.House, 0);
-
-        // play audio
-        m_Ambient.PlayLoop(m_Wind);
     }
 
     void Update() {
