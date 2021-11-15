@@ -25,6 +25,9 @@ public class Actor: MonoBehaviour {
     [Tooltip("the animation controller")]
     [SerializeField] Animator m_Animator;
 
+    [Tooltip("the vocal audio")]
+    [SerializeField] AudioSource m_Vocals;
+
     [Tooltip("the subtitles")]
     [SerializeField] Subtitles m_Subtitles;
 
@@ -80,6 +83,7 @@ public class Actor: MonoBehaviour {
         }
 
         // start monologue
+        m_Vocals.Play();
         m_Subtitles.Play();
         m_Animator.enabled = true;
     }

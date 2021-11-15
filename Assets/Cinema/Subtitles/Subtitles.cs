@@ -96,7 +96,6 @@ public class Subtitles: MonoBehaviour {
 
         for (var i = 0; i < lines.Length; i++) {
             lines[i] = lines[i].Trim();
-            Debug.Log($"line {lines[i]}");
         }
 
         return lines;

@@ -14,7 +14,6 @@ public class DirectorActions{
     public DirectorActions(PlayerInput input) {
         m_Cut = input.currentActionMap["Cut"];
         m_Look = input.currentActionMap["Look"];
-        Debug.Log($"look {m_Look}");
     }
 
     // -- queries --
