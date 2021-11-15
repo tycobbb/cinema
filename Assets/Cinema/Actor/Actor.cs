@@ -6,6 +6,9 @@ public class Actor: MonoBehaviour {
     /// property id for the mouth open pct
     int s_OpenPctId = -1;
 
+    /// property id for the animator random value
+    int s_AnimRandomId = -1;
+
     // -- tuning --
     [Header("tuning")]
     [Tooltip("the resistance to acting")]
@@ -14,7 +17,10 @@ public class Actor: MonoBehaviour {
     // -- nodes --
     [Header("nodes")]
     [Tooltip("the model's mesh renderer")]
-    [SerializeField] MeshRenderer m_Mesh;
+    [SerializeField] Renderer m_Mesh;
+
+    [Tooltip("the animation controller")]
+    [SerializeField] Animator m_Animator;
 
     [Tooltip("the subtitles")]
     [SerializeField] Subtitles m_Subtitles;
@@ -27,6 +33,7 @@ public class Actor: MonoBehaviour {
     void Awake() {
         if (s_OpenPctId == -1) {
             s_OpenPctId = Shader.PropertyToID("_OpenPct");
+            s_AnimRandomId = Animator.StringToHash("Random");
         }
     }
 
@@ -35,10 +42,15 @@ public class Actor: MonoBehaviour {
     }
 
     void Update() {
-        // set mouth openness
-        if (IsPlaying) {
-            m_Material.SetFloat(s_OpenPctId, Mathf.PingPong(Time.time * 4.0f, 1.0f));
+        if (!IsPlaying) {
+            return;
         }
+
+        // set mouth openness
+        m_Material.SetFloat(s_OpenPctId, Mathf.PingPong(Time.time * 4.0f, 1.0f));
+
+        // set animator props
+        m_Animator.SetFloat(s_AnimRandomId, Random.value);
     }
 
     // -- commands --
@@ -53,6 +65,7 @@ public class Actor: MonoBehaviour {
 
         // start monologue
         m_Subtitles.Play();
+        m_Animator.enabled = true;
     }
 
     // -- queries --
