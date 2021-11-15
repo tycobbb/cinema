@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -8,6 +9,15 @@ public class Subtitles: MonoBehaviour {
     [Header("tuning")]
     [Tooltip("the words / sec reading speed")]
     [SerializeField] float m_Wps = 5;
+
+    [Tooltip("the delay for a comma")]
+    [SerializeField] float m_Comma = 0.4f;
+
+    [Tooltip("the delay for a period")]
+    [SerializeField] float m_Period = 1.0f;
+
+    [Tooltip("the delay for a question mark")]
+    [SerializeField] float m_QuestionMark = 0.7f;
 
     [Tooltip("the delay between lines")]
     [SerializeField] AnimationCurve m_Delay = CurveExt.One();
@@ -26,7 +36,7 @@ public class Subtitles: MonoBehaviour {
 
     // -- lifecycle --
     void Awake() {
-        /// set props
+        // set props
         m_Lines = DecodeLines();
     }
 
@@ -42,14 +52,31 @@ public class Subtitles: MonoBehaviour {
 
         while (true) {
             var line = m_Lines[i];
-            Debug.Log($"play {line}");
             m_Subtitle.text = m_Lines[i];
 
             // get reading time
             var words = line.Trim().Split(' ');
             var duration = words.Length / m_Wps;
 
-            // add delay
+            // add punctuation delay
+            for (var j = m_Lines.Length - 1; j >= 0; j--) {
+                var c = line[j];
+
+                var delay = line[j] switch {
+                    ',' => m_Comma,
+                    '.' => m_Period,
+                    '?' => m_QuestionMark,
+                    _   => -1.0f
+                };
+
+                if (delay == -1.0f) {
+                    break;
+                }
+
+                duration += delay;
+            }
+
+            // add random delay
             duration += m_Delay.Sample();
 
             // advance line

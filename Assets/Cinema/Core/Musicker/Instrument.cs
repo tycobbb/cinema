@@ -8,13 +8,6 @@ public class Instrument: MonoBehaviour {
     [Tooltip("the chromatic scale (usually C3-based); must have a multiple of 12 notes")]
     [SerializeField] AudioClip[] m_Scale;
 
-    // -- lifecycle --
-    void Awake() {
-        if (m_Scale.Length % 12 != 0) {
-            Debug.LogError($"{this} has an incomplete octave");
-        }
-    }
-
     // -- queries --
     /// the duration of any clip
     public float Duration {

@@ -6,6 +6,9 @@ using UnityEngine;
 public sealed class Musicker: MonoBehaviour {
     // -- tuning --
     [Header("tuning")]
+    [Tooltip("the max volume")]
+    [SerializeField] float m_MaxVolume = 1.0f;
+
     [Tooltip("the template audio source")]
     [SerializeField] AudioSource m_Template;
 
@@ -184,8 +187,8 @@ public sealed class Musicker: MonoBehaviour {
     /// init loop support
     void PlayLoop_Init() {
         // set initial volumes
-        m_Volume = 1.0f;
-        m_VolumeBySource = new float[m_NumSources].Fill(1.0f);
+        m_Volume = m_MaxVolume;
+        m_VolumeBySource = new float[m_NumSources].Fill(m_MaxVolume);
     }
 
     void PlayLoop_Update() {
@@ -231,7 +234,7 @@ public sealed class Musicker: MonoBehaviour {
     /// play the loop
     IEnumerator PlayLoopAsync(Loop loop, Key? key = null) {
         // fade in
-        VolumeLens().TweenTo(0.0f, 1.0f, duration: loop.Fade);
+        VolumeLens().TweenTo(0.0f, m_MaxVolume, duration: loop.Fade);
 
         // the time between loop plays
         var blend = loop.Blend;
@@ -243,7 +246,7 @@ public sealed class Musicker: MonoBehaviour {
             var source = VolumeLens(i);
 
             // blend in the tone
-            source.TweenTo(0.0f, 1.0f, duration: blend);
+            source.TweenTo(0.0f, m_MaxVolume, duration: blend);
 
             // play the tone
             PlayTone(loop.Curr(), key);
@@ -256,7 +259,7 @@ public sealed class Musicker: MonoBehaviour {
             }
 
             // blend out the tone
-            source.TweenTo(1.0f, 0.0f, duration: blend);
+            source.TweenTo(m_MaxVolume, 0.0f, duration: blend);
         }
     }
 
@@ -271,7 +274,7 @@ public sealed class Musicker: MonoBehaviour {
         StopCoroutine(m_Routine);
 
         // fade out
-        VolumeLens().TweenTo(1.0f, 0.0f, duration: m_Loop.Fade);
+        VolumeLens().TweenTo(m_MaxVolume, 0.0f, duration: m_Loop.Fade);
 
         // reset state
         m_Loop = null;

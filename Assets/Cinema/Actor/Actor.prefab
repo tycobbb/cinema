@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5271252446288528506}
   - component: {fileID: 2289918779809996288}
   m_Layer: 0
-  m_Name: dancin
+  m_Name: Dancin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ad4ef45abf54ff19959475f6f6adba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Stubborness: 2
   m_Mesh: {fileID: 4019269407406379645}
   m_Subtitles: {fileID: 0}
 --- !u!1 &7243289030298608645
@@ -109,7 +110,7 @@ GameObject:
   - component: {fileID: 116390598613805373}
   - component: {fileID: 4019269407406379645}
   m_Layer: 0
-  m_Name: SB_dancin
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

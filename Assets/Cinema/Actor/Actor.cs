@@ -6,6 +6,11 @@ public class Actor: MonoBehaviour {
     /// property id for the mouth open pct
     int s_OpenPctId = -1;
 
+    // -- tuning --
+    [Header("tuning")]
+    [Tooltip("the resistance to acting")]
+    [SerializeField] int m_Stubborness;
+
     // -- nodes --
     [Header("nodes")]
     [Tooltip("the model's mesh renderer")]
@@ -17,9 +22,6 @@ public class Actor: MonoBehaviour {
     // -- props --
     /// the mesh materials
     Material m_Material;
-
-    /// if the actor is monologuing
-    bool m_IsPlaying;
 
     // -- lifecycle --
     void Awake() {
@@ -34,7 +36,7 @@ public class Actor: MonoBehaviour {
 
     void Update() {
         // set mouth openness
-        if (m_IsPlaying) {
+        if (IsPlaying) {
             m_Material.SetFloat(s_OpenPctId, Mathf.PingPong(Time.time * 4.0f, 1.0f));
         }
     }
@@ -42,11 +44,20 @@ public class Actor: MonoBehaviour {
     // -- commands --
     /// start the actor's monologue
     public void Play() {
-        if (m_IsPlaying) {
+        m_Stubborness -= 1;
+
+        // see if we're ready to act
+        if (m_Stubborness != 0) {
             return;
         }
 
-        m_IsPlaying = true;
+        // start monologue
         m_Subtitles.Play();
+    }
+
+    // -- queries --
+    /// if the actor is monologuing
+    bool IsPlaying {
+        get => m_Stubborness <= 0;
     }
 }
