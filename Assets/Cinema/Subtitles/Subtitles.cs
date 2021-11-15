@@ -55,11 +55,13 @@ public class Subtitles: MonoBehaviour {
             m_Subtitle.text = m_Lines[i];
 
             // get reading time
-            var words = line.Trim().Split(' ');
-            var duration = words.Length / m_Wps;
+            var dur = 0.0f;
+
+            // based on number of words
+            dur += line.Trim().Split(' ').Length / m_Wps;
 
             // add punctuation delay
-            for (var j = m_Lines.Length - 1; j >= 0; j--) {
+            for (var j = line.Length - 1; j >= 0; j--) {
                 var c = line[j];
 
                 var delay = line[j] switch {
@@ -73,17 +75,17 @@ public class Subtitles: MonoBehaviour {
                     break;
                 }
 
-                duration += delay;
+                dur += delay;
             }
 
             // add random delay
-            duration += m_Delay.Sample();
+            dur += m_Delay.Sample();
 
             // advance line
             i = (i + 1) % m_Lines.Length;
 
             // wait until next line
-            yield return new WaitForSeconds(duration);
+            yield return new WaitForSeconds(dur);
         }
     }
 
@@ -94,6 +96,7 @@ public class Subtitles: MonoBehaviour {
 
         for (var i = 0; i < lines.Length; i++) {
             lines[i] = lines[i].Trim();
+            Debug.Log($"line {lines[i]}");
         }
 
         return lines;

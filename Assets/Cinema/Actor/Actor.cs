@@ -16,6 +16,9 @@ public class Actor: MonoBehaviour {
 
     // -- nodes --
     [Header("nodes")]
+    [Tooltip("the model")]
+    [SerializeField] Transform m_Model;
+
     [Tooltip("the model's mesh renderer")]
     [SerializeField] Renderer m_Mesh;
 
@@ -26,19 +29,23 @@ public class Actor: MonoBehaviour {
     [SerializeField] Subtitles m_Subtitles;
 
     // -- props --
+    /// the actor's model pos
+    Vector3 m_ModelPos;
+
     /// the mesh materials
     Material m_Material;
 
     // -- lifecycle --
     void Awake() {
+        // set props
+        m_ModelPos = m_Model.position;
+        m_Material = m_Mesh.materials[0];
+
+        // set statics
         if (s_OpenPctId == -1) {
             s_OpenPctId = Shader.PropertyToID("_OpenPct");
             s_AnimRandomId = Animator.StringToHash("Random");
         }
-    }
-
-    void Start() {
-        m_Material = m_Mesh.materials[0];
     }
 
     void Update() {
@@ -51,6 +58,15 @@ public class Actor: MonoBehaviour {
 
         // set animator props
         m_Animator.SetFloat(s_AnimRandomId, Random.value);
+    }
+
+    void FixedUpdate() {
+        if (!IsPlaying) {
+            return;
+        }
+
+        // stay in one place (animations move the actor)
+        m_Model.position = m_ModelPos;
     }
 
     // -- commands --
